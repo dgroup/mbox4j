@@ -1,0 +1,24 @@
+architect:
+  - dgroup
+
+readers:
+  - "urn:github:1651114"
+
+# @todo #/DEV Generate the pubring.gpg and secring.gpg for rultor.
+#   Define a new mvn profile `ossrh-mbox4j` for integration with mvn central.
+assets:
+  settings.xml: "dgroup/ossrh#settings.xml"
+  pubring.gpg:  "dgroup/ossrh#1B112A24-term4j-pubring.gpg"
+  secring.gpg:  "dgroup/ossrh#1B112A24-term4j-secring.gpg"
+
+merge:
+  env:
+      MAVEN_OPTS: "-XX:MaxPermSize=256m -Xmx512m"
+  script:
+    - mvn -Pqulice clean package
+release:
+  script: |
+    mvn versions:set "-DnewVersion=$tag"
+    git add pom.xml
+    git commit -am "$tag"
+    mvn -X -V -Dgpg.homedir="$HOME" -P qulice,ossrh-mbox4j -s ../settings.xml clean deploy
