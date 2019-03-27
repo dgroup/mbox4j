@@ -5,7 +5,7 @@ readers:
   - "urn:github:1651114"
 
 # @todo #/DEV Generate the pubring.gpg and secring.gpg for rultor.
-#   Define a new mvn profile `ossrh-mbox4j` for integration with mvn central.
+#  Define a new mvn profile `ossrh-mbox4j` for integration with mvn central.
 assets:
   settings.xml: "dgroup/ossrh#settings.xml"
   pubring.gpg:  "dgroup/ossrh#1B112A24-term4j-pubring.gpg"

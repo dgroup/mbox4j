@@ -75,6 +75,7 @@
     <mvn.nexus.version>1.6.8</mvn.nexus.version>
     <mvn.javadoc.version>2.9.1</mvn.javadoc.version>
     <mvn.source.version>2.2.1</mvn.source.version>
+    <mvn.surefire.version>3.0.0-M3</mvn.surefire.version>
     <mvn.gpg.version>1.5</mvn.gpg.version>
     <mvn.properties.version>1.0.0</mvn.properties.version>
     <jacoco.version>0.7.9</jacoco.version>
@@ -201,6 +202,16 @@
         </executions>
         <configuration>
           <additionalparam>-Xdoclint:none</additionalparam>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${mvn.surefire.version}</version>
+        <configuration>
+          <reuseForks>true</reuseForks>
+          <useSystemClassLoader>false</useSystemClassLoader>
+          <threadCount>4</threadCount>
         </configuration>
       </plugin>
     </plugins>
