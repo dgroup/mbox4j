@@ -26,6 +26,7 @@ package io.github.dgroup.mbox4j.outbox.javax;
 
 import io.github.dgroup.mbox4j.EmailException;
 import io.github.dgroup.mbox4j.GmailProperties;
+import io.github.dgroup.mbox4j.YandexProperties;
 import io.github.dgroup.mbox4j.msg.MsgOf;
 import io.github.dgroup.term4j.arg.ArgNotFoundException;
 import io.github.dgroup.term4j.arg.PropOf;
@@ -48,13 +49,33 @@ public final class JavaxMailOutboxTestIT {
      * @todo #/DEV Enable test once the SMTP server is UP and available for sending.
      */
     @Test
-    public void send() throws EmailException, ArgNotFoundException {
+    public void sendFromGmailAccount() throws EmailException, ArgNotFoundException {
         new JavaxMailOutbox(
             new GmailProperties()
         ).send(
             new MsgOf(
                 new PropOf("LL.gmail.user").value(),
                 new PropOf("LL.gmail.to.user").value(),
+                "Testing subj",
+                "I'm simple and i know it."
+            )
+        );
+    }
+
+    /**
+     * Integration test for email message sending procedure.
+     * @throws EmailException In case issues during sending.
+     * @throws ArgNotFoundException In case if user credentials
+     *  were not specified during the testing procedure.
+     */
+    @Test
+    public void sendFromYandexAccount() throws EmailException, ArgNotFoundException {
+        new JavaxMailOutbox(
+            new YandexProperties()
+        ).send(
+            new MsgOf(
+                new PropOf("LL.yandex.user").value(),
+                new PropOf("LL.yandex.to.user").value(),
                 "Testing subj",
                 "I'm simple and i know it."
             )
