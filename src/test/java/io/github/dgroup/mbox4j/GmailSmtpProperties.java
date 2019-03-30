@@ -30,11 +30,11 @@ import java.util.Properties;
 import org.cactoos.Scalar;
 
 /**
- * Gmail SMTP properties..
+ * Gmail incoming/outgoing SMTP server properties.
  *
  * @since 0.1.0
  */
-public final class GmailProperties implements Scalar<Properties> {
+public final class GmailSmtpProperties implements Scalar<Properties> {
 
     @Override
     public Properties value() throws ArgNotFoundException {

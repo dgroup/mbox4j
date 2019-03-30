@@ -24,9 +24,10 @@
 
 package io.github.dgroup.mbox4j.inbox.javax;
 
-import io.github.dgroup.mbox4j.GmailProperties;
+import io.github.dgroup.mbox4j.EmailException;
 import io.github.dgroup.mbox4j.Msg;
 import io.github.dgroup.mbox4j.Query;
+import io.github.dgroup.mbox4j.YandexIncomingSmtpProperties;
 import io.github.dgroup.mbox4j.inbox.javax.search.mode.Modes;
 import io.github.dgroup.mbox4j.query.QueryOf;
 import io.github.dgroup.mbox4j.query.mode.Mode;
@@ -40,6 +41,7 @@ import org.cactoos.map.MapOf;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.llorllale.cactoos.matchers.Assertion;
+import org.llorllale.cactoos.matchers.HasValues;
 
 /**
  * Test case for {@link JavaxMailInbox}.
@@ -54,23 +56,47 @@ import org.llorllale.cactoos.matchers.Assertion;
 public final class JavaxMailInboxTestIT {
 
     @Test
-    public void read() {
+    public void size() {
         new Assertion<>(
             "3 emails were read",
-            () -> {
-                final Mode mode = new ModeOf("first 3 emails");
-                final Query query = new QueryOf("pop3s", "INBOX", mode);
-                final Func<Folder, Iterable<Msg>> fnc = folder -> new ArrayList<>(
-                    new Mapped<>(
-                        new ToMsg(), folder.getMessages(1, 3)
-                    )
-                );
-                return new JavaxMailInbox(
-                    new GmailProperties(),
-                    new Modes(new MapOf<>(new MapEntry<>(mode, fnc)))
-                ).read(query);
-            },
+            () -> this.read(3),
             Matchers.iterableWithSize(3)
         ).affirm();
+    }
+
+    @Test
+    public void subject() {
+        new Assertion<>(
+            "3 emails have expected subject",
+            () -> new Mapped<>(
+                msg -> msg.subject().asString(),
+                this.read(3)
+            ),
+            new HasValues<>(
+                "The first email",
+                "The second email",
+                "The third email"
+            )
+        ).affirm();
+    }
+
+    /**
+     * Read range of emails from the dedicated SMTP server.
+     * @param quantity The quantity of messages to be fetched from SMTP server.
+     * @return The emails.
+     * @throws EmailException Шn case of connectivity issues.
+     */
+    private Iterable<Msg> read(final int quantity) throws EmailException {
+        final Mode mode = new ModeOf("first several emails");
+        final Query query = new QueryOf("imaps", "INBOX", mode);
+        final Func<Folder, Iterable<Msg>> fnc = folder -> new ArrayList<>(
+            new Mapped<>(
+                new ToMsg(), folder.getMessages(1, quantity)
+            )
+        );
+        return new JavaxMailInbox(
+            new YandexIncomingSmtpProperties(),
+            new Modes(new MapOf<>(new MapEntry<>(mode, fnc)))
+        ).read(query);
     }
 }

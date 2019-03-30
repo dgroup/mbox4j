@@ -22,41 +22,30 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.outbox.javax;
+package io.github.dgroup.mbox4j;
 
-import io.github.dgroup.mbox4j.EmailException;
-import io.github.dgroup.mbox4j.YandexOutgoingSmtpProperties;
-import io.github.dgroup.mbox4j.msg.MsgOf;
 import io.github.dgroup.term4j.arg.ArgNotFoundException;
 import io.github.dgroup.term4j.arg.PropOf;
-import org.junit.Test;
+import java.util.Properties;
+import org.cactoos.Scalar;
 
 /**
- * Test case for {@link JavaxMailOutbox}.
+ * Yandex SMTP server incoming properties.
  *
  * @since 0.1.0
- * @checkstyle JavadocMethodCheck (500 lines)
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class JavaxMailOutboxTestIT {
+public final class YandexIncomingSmtpProperties implements Scalar<Properties> {
 
-    /**
-     * Integration test for email message sending procedure.
-     * @throws EmailException In case issues during sending.
-     * @throws ArgNotFoundException In case if user credentials
-     *  were not specified during the testing procedure.
-     */
-    @Test
-    public void sendFromYandexAccount() throws EmailException, ArgNotFoundException {
-        new JavaxMailOutbox(
-            new YandexOutgoingSmtpProperties()
-        ).send(
-            new MsgOf(
-                new PropOf("LL.yandex.user").value(),
-                new PropOf("LL.yandex.to.user").value(),
-                "Testing subj",
-                "I'm simple and i know it."
-            )
-        );
+    @Override
+    public Properties value() throws ArgNotFoundException {
+        final Properties props = new Properties();
+        props.setProperty("mail.smtp.auth", Boolean.TRUE.toString());
+        props.setProperty("mail.smtp.starttls.enable", Boolean.TRUE.toString());
+        props.setProperty("mail.smtp.host", "imap.yandex.com");
+        props.setProperty("mail.smtp.port", "993");
+        props.setProperty("username", new PropOf("LL.yandex.user").value());
+        props.setProperty("password", new PropOf("LL.yandex.pass").value());
+        return props;
     }
+
 }
