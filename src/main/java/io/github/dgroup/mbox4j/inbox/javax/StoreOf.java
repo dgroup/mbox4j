@@ -21,41 +21,45 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
+package io.github.dgroup.mbox4j.inbox.javax;
 
-package io.github.dgroup.mbox4j.inbox.func.javax;
-
-import io.github.dgroup.mbox4j.GmailProperties;
 import io.github.dgroup.mbox4j.Query;
-import org.junit.Ignore;
-import org.junit.Test;
+import java.util.Properties;
+import javax.mail.Session;
+import javax.mail.Store;
+import org.cactoos.Func;
+import org.cactoos.Scalar;
 
 /**
- * Test case for {@link JavaxMailInbox}.
+ * The function to evaluate the {@link javax.mail.Store} based on SMTP properties.
  *
  * @since 0.1.0
- * @checkstyle JavadocMethodCheck (500 lines)
- * @todo #/DEV Enable test once the SMTP server is UP and available for reading.
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class JavaxMailInboxTest {
+public final class StoreOf implements Func<Query, Store> {
 
-    @Test
-    @Ignore
-    public void read() throws Exception {
-        new JavaxMailInbox(
-            new GmailProperties()
-        ).apply(
-            new Query() {
-                @Override
-                public String protocol() {
-                    return "pop3s";
-                }
+    /**
+     * The SMTP connectivity properties.
+     */
+    private final Scalar<Properties> props;
 
-                @Override
-                public String folder() {
-                    return "INBOX";
-                }
-            }
+    /**
+     * Ctor.
+     * @param props The SMTP connectivity properties.
+     */
+    public StoreOf(final Scalar<Properties> props) {
+        this.props = props;
+    }
+
+    @Override
+    public Store apply(final Query query) throws Exception {
+        final Properties smtp = this.props.value();
+        final Session session = Session.getDefaultInstance(smtp);
+        final Store store = session.getStore(query.protocol());
+        store.connect(
+            smtp.getProperty("mail.smtp.host"),
+            smtp.getProperty("username"),
+            smtp.getProperty("password")
         );
+        return store;
     }
 }

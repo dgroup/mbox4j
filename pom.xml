@@ -76,6 +76,7 @@
     <mvn.javadoc.version>2.9.1</mvn.javadoc.version>
     <mvn.source.version>2.2.1</mvn.source.version>
     <mvn.surefire.version>3.0.0-M3</mvn.surefire.version>
+    <mvn.failsafe.version>3.0.0-M3</mvn.failsafe.version>
     <mvn.gpg.version>1.5</mvn.gpg.version>
     <mvn.properties.version>1.0.0</mvn.properties.version>
     <jacoco.version>0.7.9</jacoco.version>
@@ -99,8 +100,7 @@
     <code.cvrg.line>0.0</code.cvrg.line>
     <sonar.coverage.exclusions>
       **/*Exception.java,
-      **/*Fake*.java,**/*.Fake*.java,**/**.Fake*.java,
-      **/RuntimeOf.java
+      **/*Fake*.java,**/*.Fake*.java,**/**.Fake*.java
     </sonar.coverage.exclusions>
   </properties>
   <dependencies>
@@ -406,6 +406,45 @@
               <nexusUrl>https://oss.sonatype.org/</nexusUrl>
               <autoReleaseAfterClose>true</autoReleaseAfterClose>
             </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>integration-tests</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <version>${mvn.failsafe.version}</version>
+            <configuration>
+              <properties>
+                <code.cvrg.classes-without-tests>5</code.cvrg.classes-without-tests>
+                <code.cvrg.instructions>0.5</code.cvrg.instructions>
+                <code.cvrg.complexity>0.5</code.cvrg.complexity>
+                <code.cvrg.methods>0.5</code.cvrg.methods>
+                <code.cvrg.branch>0.5</code.cvrg.branch>
+                <code.cvrg.line>0.5</code.cvrg.line>
+              </properties>
+              <reuseForks>true</reuseForks>
+              <threadCount>4</threadCount>
+            </configuration>
+            <executions>
+              <execution>
+                <id>Execute integration tests</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>integration-test</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>Verify the status of integration tests</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>verify</goal>
+                </goals>
+              </execution>
+            </executions>
           </plugin>
         </plugins>
       </build>

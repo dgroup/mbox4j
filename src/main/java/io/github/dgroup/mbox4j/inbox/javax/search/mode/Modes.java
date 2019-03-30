@@ -22,9 +22,40 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+package io.github.dgroup.mbox4j.inbox.javax.search.mode;
+
+import io.github.dgroup.mbox4j.Msg;
+import io.github.dgroup.mbox4j.query.mode.Mode;
+import java.util.Map;
+import javax.mail.Folder;
+import org.cactoos.Func;
+import org.cactoos.map.MapEntry;
+import org.cactoos.map.MapEnvelope;
+import org.cactoos.map.MapOf;
+
 /**
- * The unit-tests for the package {@link io.github.dgroup.mbox4j.inbox}.
+ * The search modes to be used within email folders.
  *
  * @since 0.1.0
  */
-package io.github.dgroup.mbox4j.inbox.func.javax;
+public final class Modes extends MapEnvelope<Mode, Func<Folder, Iterable<Msg>>> {
+
+    /**
+     * Ctor.
+     */
+    public Modes() {
+        this(
+            new MapOf<>(
+                new MapEntry<>(new io.github.dgroup.mbox4j.query.mode.All(), new All())
+            )
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param modes The search modes.
+     */
+    public Modes(final Map<Mode, Func<Folder, Iterable<Msg>>> modes) {
+        super(() -> modes);
+    }
+}

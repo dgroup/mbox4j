@@ -22,24 +22,18 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.query;
-
-import io.github.dgroup.mbox4j.Query;
+package io.github.dgroup.mbox4j.query.mode;
 
 /**
- * The fake implementation of {@link Query} for unit-testing purposes.
+ * The type of search mode within email folder.
  *
  * @since 0.1.0
  */
-public final class FakeQuery implements Query {
+public interface Mode {
 
-    @Override
-    public String protocol() {
-        return null;
-    }
-
-    @Override
-    public String folder() {
-        return null;
-    }
+    /**
+     * The name of type of search within email folder.
+     * @return The name of mode.
+     */
+    String name();
 }

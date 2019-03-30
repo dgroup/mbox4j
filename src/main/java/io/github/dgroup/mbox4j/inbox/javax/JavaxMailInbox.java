@@ -22,38 +22,32 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.inbox.func.javax;
+package io.github.dgroup.mbox4j.inbox.javax;
 
+import io.github.dgroup.mbox4j.EmailException;
+import io.github.dgroup.mbox4j.Inbox;
 import io.github.dgroup.mbox4j.Msg;
 import io.github.dgroup.mbox4j.Query;
-import io.github.dgroup.mbox4j.inbox.InboxOf;
-import java.util.ArrayList;
+import io.github.dgroup.mbox4j.inbox.javax.search.mode.Modes;
+import java.util.Collections;
 import java.util.Properties;
 import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.Session;
+import javax.mail.MessagingException;
 import javax.mail.Store;
 import org.cactoos.Func;
 import org.cactoos.Scalar;
-import org.cactoos.collection.Mapped;
 
 /**
  * The function to evaluate the messages using {@link javax.mail} framework.
  *
  * Example:
- * {@code
- * final Inbox inbox = new InboxOf(
- *     new JavaxMailInbox(properties)
- * );
- * }
- *
- * @see InboxOf
+ * {@code final Inbox inbox = new JavaxMailInbox(smptProperties);}
  *
  * @since 0.1.0
  * @todo #/DEV Implement search to the javax instead of fetching all messages.
  *  The search should be based on {@link Query}.
  */
-public final class JavaxMailInbox implements Func<Query, Iterable<Msg>> {
+public final class JavaxMailInbox implements Inbox {
 
     /**
      * The function to evaluate the {@link javax.mail.Store}.
@@ -61,57 +55,70 @@ public final class JavaxMailInbox implements Func<Query, Iterable<Msg>> {
     private final Func<Query, Store> fstore;
 
     /**
-     * The function to map {@link javax.mail.Message} and {@link Msg}.
+     * The search modes to be used within email folders.
      */
-    private final Func<Message, Msg> fmsg;
+    private final Modes modes;
 
     /**
      * Ctor.
      * @param props The mail server connection properties.
      */
     public JavaxMailInbox(final Scalar<Properties> props) {
-        this(
-            query -> {
-                final Properties smtp = props.value();
-                final Session session = Session.getDefaultInstance(smtp);
-                final Store store = session.getStore(query.protocol());
-                store.connect(
-                    smtp.getProperty("mail.smtp.host"),
-                    smtp.getProperty("username"),
-                    smtp.getProperty("password")
-                );
-                return store;
-            },
-            new ToMsg()
-        );
+        this(props, new Modes());
+    }
+
+    /**
+     * Ctor.
+     * @param props The mail server connection properties.
+     * @param modes The search modes to be used within email folders.
+     */
+    public JavaxMailInbox(final Scalar<Properties> props, final Modes modes) {
+        this(new StoreOf(props), modes);
     }
 
     /**
      * Ctor.
      * @param fstore The function to evaluate a {@link Store} in order to
      *  manipulate with email messages.
-     * @param fmsg The function to map {@link javax.mail.Message} and {@link Msg}.
+     * @param modes The search modes to be used within email folders.
      * @todo #/DEV Make this ctor with {@code Func<Query,Store>} public.
      *  For now this ctor has a side effect as it closes
      *  the {@link javax.mail.Store} and {@link javax.mail.Folder}.
      */
-    private JavaxMailInbox(final Func<Query, Store> fstore, final Func<Message, Msg> fmsg) {
+    private JavaxMailInbox(final Func<Query, Store> fstore, final Modes modes) {
         this.fstore = fstore;
-        this.fmsg = fmsg;
+        this.modes = modes;
     }
 
     @Override
-    public Iterable<Msg> apply(final Query query) throws Exception {
-        final Store store = this.fstore.apply(query);
-        final Folder folder = store.getFolder(query.folder());
+    @SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.EmptyCatchBlock"})
+    public Iterable<Msg> read(final Query query) throws EmailException {
+        Store store = null;
+        Folder folder = null;
         try {
+            store = this.fstore.apply(query);
+            folder = store.getFolder(query.folder());
             folder.open(Folder.READ_ONLY);
-            return new ArrayList<>(
-                new Mapped<>(this.fmsg, folder.getMessages())
-            );
+            return this.modes.getOrDefault(
+                query.mode(), fallback -> Collections.emptySet()
+            ).apply(folder);
+            // @checkstyle IllegalCatchCheck (3 lines)
+        } catch (final Exception cause) {
+            throw new EmailException(cause);
         } finally {
-            folder.close(true);
-            store.close();
+            if (folder != null) {
+                try {
+                    folder.close(true);
+                } catch (final MessagingException cause) {
+                }
+            }
+            if (store != null) {
+                try {
+                    store.close();
+                } catch (final MessagingException cause) {
+                }
+            }
         }
     }
+
 }

@@ -24,6 +24,8 @@
 
 package io.github.dgroup.mbox4j;
 
+import io.github.dgroup.mbox4j.query.mode.Mode;
+
 /**
  * The query for email search procedure..
  *
@@ -46,5 +48,12 @@ public interface Query {
      * @return The root folder.
      */
     String folder();
+
+    /**
+     * The type of search mode within email folder.
+     * @return The mode.
+     * @see io.github.dgroup.mbox4j.query.mode.All
+     */
+    Mode mode();
 
 }

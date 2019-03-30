@@ -29,7 +29,6 @@ import io.github.dgroup.mbox4j.GmailProperties;
 import io.github.dgroup.mbox4j.msg.MsgOf;
 import io.github.dgroup.term4j.arg.ArgNotFoundException;
 import io.github.dgroup.term4j.arg.PropOf;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -39,7 +38,7 @@ import org.junit.Test;
  * @checkstyle JavadocMethodCheck (500 lines)
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class JavaxMailOutboxTest {
+public final class JavaxMailOutboxTestIT {
 
     /**
      * Integration test for email message sending procedure.
@@ -49,7 +48,6 @@ public final class JavaxMailOutboxTest {
      * @todo #/DEV Enable test once the SMTP server is UP and available for sending.
      */
     @Test
-    @Ignore
     public void send() throws EmailException, ArgNotFoundException {
         new JavaxMailOutbox(
             new GmailProperties()
@@ -58,7 +56,7 @@ public final class JavaxMailOutboxTest {
                 new PropOf("LL.gmail.user").value(),
                 new PropOf("LL.gmail.to.user").value(),
                 "Testing subj",
-                "Dear Mail Crawler,\n\n No spam to my email, please!"
+                "I'm simple and i know it."
             )
         );
     }

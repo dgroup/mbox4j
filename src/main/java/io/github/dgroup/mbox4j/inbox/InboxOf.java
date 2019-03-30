@@ -33,7 +33,7 @@ import org.cactoos.Func;
  * The email inbox.
  *
  * @see io.github.dgroup.mbox4j.Inbox
- * @see io.github.dgroup.mbox4j.inbox.func
+ * @see io.github.dgroup.mbox4j.inbox.javax.func
  *
  * @since 0.1.0
  */
@@ -42,7 +42,7 @@ public final class InboxOf extends InboxEnvelope {
     /**
      * Ctor.
      * @param fnc The function to fetch email messages based on query.
-     * @see io.github.dgroup.mbox4j.inbox.func
+     * @see io.github.dgroup.mbox4j.inbox.javax.func
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public InboxOf(final Func<Query, Iterable<Msg>> fnc) {

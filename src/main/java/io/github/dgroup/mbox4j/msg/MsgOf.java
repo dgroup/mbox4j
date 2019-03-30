@@ -29,6 +29,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.Set;
 import org.cactoos.Text;
+import org.cactoos.iterable.Mapped;
 import org.cactoos.set.SetOf;
 import org.cactoos.text.TextOf;
 
@@ -51,13 +52,41 @@ public final class MsgOf extends MsgEnvelope {
      */
     public MsgOf(final String from, final String to, final String subj, final String body) {
         this(
+            from,
+            new SetOf<>(to),
+            Collections.emptySet(),
+            Collections.emptySet(),
+            subj,
+            body,
+            Collections.emptySet()
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param from The sender's email address.
+     * @param to The target email recipients.
+     * @param cc The target email recipients for the `CC` (carbon copy).
+     * @param bcc The target email recipients for the `BCC` (blind carbon copy).
+     * @param subj The subject of the email message.
+     * @param body The message content.
+     * @param attachments The message attachments.
+     * @checkstyle ParameterNameCheck (10 lines)
+     * @checkstyle ParameterNumberCheck (5 lines)
+     * @checkstyle AnonInnerLengthCheck (30 lines)
+     */
+    public MsgOf(
+        final String from, final Set<String> to, final Set<String> cc, final Set<String> bcc,
+        final String subj, final String body, final Iterable<File> attachments
+    ) {
+        this(
             new TextOf(from),
-            new SetOf<>(new TextOf(to)),
-            Collections.emptySet(),
-            Collections.emptySet(),
+            new SetOf<>(new Mapped<>(TextOf::new, to)),
+            new SetOf<>(new Mapped<>(TextOf::new, cc)),
+            new SetOf<>(new Mapped<>(TextOf::new, bcc)),
             new TextOf(subj),
             new TextOf(body),
-            Collections.emptySet()
+            attachments
         );
     }
 

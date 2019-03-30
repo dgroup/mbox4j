@@ -22,12 +22,27 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+package io.github.dgroup.mbox4j.inbox.javax.search.mode;
+
+import io.github.dgroup.mbox4j.Msg;
+import io.github.dgroup.mbox4j.inbox.javax.ToMsg;
+import java.util.ArrayList;
+import javax.mail.Folder;
+import org.cactoos.Func;
+import org.cactoos.collection.Mapped;
+
 /**
- * The inbox(es) for emails reading.
- *
- * The objects which allows to manipulate with {@link io.github.dgroup.mbox4j.Inbox}
- *  using different frameworks and technologies.
+ * Search mode within the email folder which is fetching all emails
+ *  using {@link javax.mail}.
  *
  * @since 0.1.0
  */
-package io.github.dgroup.mbox4j.inbox;
+public final class All implements Func<Folder, Iterable<Msg>> {
+
+    @Override
+    public Iterable<Msg> apply(final Folder folder) throws Exception {
+        return new ArrayList<>(
+            new Mapped<>(new ToMsg(), folder.getMessages())
+        );
+    }
+}

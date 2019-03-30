@@ -22,86 +22,55 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.query;
+package io.github.dgroup.mbox4j.query.mode;
 
-import io.github.dgroup.mbox4j.Query;
-import io.github.dgroup.mbox4j.query.mode.Mode;
 import java.util.Objects;
 
 /**
- * The query for email search procedure.
+ * Search mode within email folder.
  *
  * @since 0.1.0
  */
-public final class QueryOf implements Query {
-
-    /**
-     * The email connection protocol.
-     */
-    private final String pcl;
-
-    /**
-     * The root folder for search.
-     */
-    private final String fld;
+public class ModeOf implements Mode {
 
     /**
      * The type of search mode within email folder.
      */
-    private final Mode mde;
+    private final String mode;
 
     /**
      * Ctor.
-     * @param protocol The email connection protocol.
-     * @param folder The root folder for search.
      * @param mode The type of search mode within email folder.
      */
-    public QueryOf(final String protocol, final String folder, final Mode mode) {
-        this.pcl = protocol;
-        this.fld = folder;
-        this.mde = mode;
+    public ModeOf(final String mode) {
+        this.mode = mode;
     }
 
     @Override
-    public String protocol() {
-        return this.pcl;
-    }
-
-    @Override
-    public String folder() {
-        return this.fld;
-    }
-
-    @Override
-    public Mode mode() {
-        return this.mde;
+    public final String name() {
+        return this.mode;
     }
 
     @Override
     @SuppressWarnings("PMD.OnlyOneReturn")
-    public boolean equals(final Object obj) {
+    public final boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof Query)) {
+        if (!(obj instanceof Mode)) {
             return false;
         }
-        final Query that = (Query) obj;
-        return Objects.equals(this.protocol(), that.protocol())
-            && Objects.equals(this.folder(), that.folder())
-            && Objects.equals(this.mode().name(), that.mode().name());
+        final Mode that = (Mode) obj;
+        return Objects.equals(this.name(), that.name());
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(this.protocol(), this.folder(), this.mode().name());
+    public final int hashCode() {
+        return Objects.hash(this.name());
     }
 
     @Override
-    public String toString() {
-        return String.format(
-            "protocol=%s, folder=%s, mode=%s",
-            this.protocol(), this.folder(), this.mode().name()
-        );
+    public final String toString() {
+        return this.name();
     }
 }

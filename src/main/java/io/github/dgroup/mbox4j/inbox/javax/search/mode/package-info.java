@@ -23,11 +23,9 @@
  */
 
 /**
- * The inbox(es) for emails reading.
- *
- * The objects which allows to manipulate with {@link io.github.dgroup.mbox4j.Inbox}
- *  using different frameworks and technologies.
+ * The classes related to search procedure within the emails
+ *  using {@link javax.mail} framework.
  *
  * @since 0.1.0
  */
-package io.github.dgroup.mbox4j.inbox;
+package io.github.dgroup.mbox4j.inbox.javax.search.mode;

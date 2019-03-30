@@ -29,6 +29,9 @@ import java.io.File;
 import java.util.Objects;
 import java.util.Set;
 import org.cactoos.Text;
+import org.cactoos.text.Joined;
+import org.cactoos.text.TextOf;
+import org.cactoos.text.UncheckedText;
 
 /**
  * The envelope for {@link Msg}.
@@ -117,7 +120,12 @@ public class MsgEnvelope implements Msg {
     public final String toString() {
         return String.format(
             "from=%s, to=%s, cc=%s, bcc=%s, subject=%s, body=%s, attachments=%s",
-            this.from(), this.to(), this.cc(), this.bcc(), this.subject(), this.body(),
+            new UncheckedText(this.from()).asString(),
+            new Joined(new TextOf(", "), this.to()),
+            new Joined(new TextOf(", "), this.cc()),
+            new Joined(new TextOf(", "), this.bcc()),
+            new UncheckedText(this.subject()).asString(),
+            new UncheckedText(this.body()).asString(),
             this.attachments()
         );
     }

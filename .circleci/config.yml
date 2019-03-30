@@ -4,6 +4,10 @@
 # Environment variables:  https://circleci.com/docs/2.0/env-vars
 # Verify circleci *.yml:  https://circleci.com/docs/2.0/local-cli
 #
+# @todo #/DEV Enable profile for the integration tests
+#  The expected configuration is
+#  `mvn -X -P integration-tests,qulice clean install -DLL.gmail.user=${GMAIL_USER} -DLL.gmail.pass=${GMAIL_PASS} -DLL.gmail.to.user=${GMAIL_TO}`
+#
 version: 2
 jobs:
   assemble_jar:
@@ -20,7 +24,7 @@ jobs:
     - run:
         name: Build java sources (including integration tests)
         command: |
-          mvn -X -P integration-tests,qulice clean install
+          mvn -X -P qulice clean install
 
 workflows:
   version: 2

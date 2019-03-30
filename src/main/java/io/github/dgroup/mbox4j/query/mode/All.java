@@ -22,12 +22,20 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+package io.github.dgroup.mbox4j.query.mode;
+
 /**
- * The inbox(es) for emails reading.
- *
- * The objects which allows to manipulate with {@link io.github.dgroup.mbox4j.Inbox}
- *  using different frameworks and technologies.
+ * Search mode within the email folder which is fetching all emails.
  *
  * @since 0.1.0
  */
-package io.github.dgroup.mbox4j.inbox;
+public final class All extends ModeOf {
+
+    /**
+     * Ctor.
+     */
+    public All() {
+        super("all");
+    }
+
+}

@@ -26,7 +26,7 @@ package io.github.dgroup.mbox4j.outbox.javax;
 
 import io.github.dgroup.mbox4j.EmailException;
 import io.github.dgroup.mbox4j.Msg;
-import io.github.dgroup.mbox4j.outbox.OutboxEnvelope;
+import io.github.dgroup.mbox4j.Outbox;
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.Session;
@@ -39,18 +39,18 @@ import org.cactoos.scalar.StickyScalar;
  * The email postman based on {@link javax.mail} framework.
  *
  * @since 0.1.0
- * @todo #/DEV Compare two ways of the design:
- *  1) Using func to build an inbox/outbox like
- *  {code
- *  final Inbox inbox = new InboxOf(new JavaxMailInbox(properties));
- *  }
- *  2) Using object directly like
- *  {code
- *  final Outbox outbox = new JavaxMailOutbox(properties);
- *  }
- *  and use the only 1.
  */
-public class JavaxMailOutbox extends OutboxEnvelope {
+public class JavaxMailOutbox implements Outbox {
+
+    /**
+     * The function to prepare the {@link javax.mail.Message}.
+     */
+    private final BiFunc<Session, Msg, Message> fmsg;
+
+    /**
+     * The mail session with protocol providers.
+     */
+    private final Scalar<Session> session;
 
     /**
      * Ctor.
@@ -63,22 +63,28 @@ public class JavaxMailOutbox extends OutboxEnvelope {
     /**
      * Ctor.
      * @param fmsg The function to prepare the {@link javax.mail.Message}.
-     * @param sssn The mail session with protocol providers.
+     * @param session The mail session with protocol providers.
      * @see javax.mail.Message
      * @see javax.mail.Session
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
-    public JavaxMailOutbox(final BiFunc<Session, Msg, Message> fmsg, final Scalar<Session> sssn) {
-        super(msg -> {
-            try {
-                Transport.send(
-                    fmsg.apply(sssn.value(), msg)
-                );
-                // @checkstyle IllegalCatchCheck (3 lines)
-            } catch (final Exception cause) {
-                throw new EmailException(cause);
-            }
-        });
+    public JavaxMailOutbox(
+        final BiFunc<Session, Msg, Message> fmsg, final Scalar<Session> session
+    ) {
+        this.fmsg = fmsg;
+        this.session = session;
     }
 
+    @Override
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
+    public final void send(final Msg msg) throws EmailException {
+        try {
+            Transport.send(
+                this.fmsg.apply(this.session.value(), msg)
+            );
+            // @checkstyle IllegalCatchCheck (3 lines)
+        } catch (final Exception cause) {
+            throw new EmailException(cause);
+        }
+    }
 }

@@ -23,8 +23,8 @@
  */
 
 /**
- * The classes for integration with {@link javax.mail} framework.
+ * The unit-tests for the package {@link io.github.dgroup.mbox4j.inbox.javax}.
  *
- * @since 0.1.
+ * @since 0.1.0
  */
-package io.github.dgroup.mbox4j.inbox.func.javax;
+package io.github.dgroup.mbox4j.inbox.javax;

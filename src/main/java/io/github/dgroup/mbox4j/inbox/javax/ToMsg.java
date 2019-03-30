@@ -22,19 +22,18 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.inbox.func.javax;
+package io.github.dgroup.mbox4j.inbox.javax;
 
 import io.github.dgroup.mbox4j.Msg;
 import io.github.dgroup.mbox4j.msg.MsgOf;
 import java.util.Collections;
 import java.util.Set;
+import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import org.cactoos.Func;
-import org.cactoos.Text;
 import org.cactoos.collection.Mapped;
 import org.cactoos.set.SetOf;
-import org.cactoos.text.TextOf;
 
 /**
  * The function to map {@link javax.mail.Message} and {@link Msg}.
@@ -44,18 +43,21 @@ import org.cactoos.text.TextOf;
  *  text-based thus we need to define a way how to send the files.
  *  For now <em>Collections.emptySet</em> is used as a stub and should be
  *  removed later.
+ * @todo #/DEV Message content: transform MimeMultipart to String
+ *  For now the body content <em> msg.getContent().toString() </em>
+ *  looks as <em>... body=javax.mail.internet.MimeMultipart@35a50a4c ...</em>.
  */
 public final class ToMsg implements Func<Message, Msg> {
 
     @Override
     public Msg apply(final Message msg) throws Exception {
         return new MsgOf(
-            () -> msg.getFrom()[0].toString(),
+            msg.getFrom()[0].toString(),
             recipients(Message.RecipientType.TO, msg),
             recipients(Message.RecipientType.CC, msg),
             recipients(Message.RecipientType.BCC, msg),
-            msg::getSubject,
-            () -> msg.getContent().toString(),
+            msg.getSubject(),
+            msg.getContent().toString(),
             Collections.emptySet()
         );
     }
@@ -67,13 +69,17 @@ public final class ToMsg implements Func<Message, Msg> {
      * @return The recipients.
      * @throws MessagingException In case if recipients can't be retrieved.
      */
-    private static Set<Text> recipients(final Message.RecipientType type, final Message msg)
+    private static Set<String> recipients(final Message.RecipientType type, final Message msg)
         throws MessagingException {
-        return new SetOf<>(
-            new Mapped<>(
-                recpnt -> new TextOf(recpnt.toString()),
-                msg.getRecipients(type)
-            )
-        );
+        final Address[] addresses = msg.getRecipients(type);
+        final Set<String> recipients;
+        if (addresses == null || addresses.length == 0) {
+            recipients = Collections.emptySet();
+        } else {
+            recipients = new SetOf<>(
+                new Mapped<>(Address::toString, addresses)
+            );
+        }
+        return recipients;
     }
 }
