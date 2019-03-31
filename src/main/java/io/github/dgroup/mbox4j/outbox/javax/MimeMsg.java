@@ -36,6 +36,8 @@ import org.cactoos.BiFunc;
  *  from {@link Msg}.
  *
  * @since 0.1.0
+ * @todo #/DEV Add attachments to the {@link javax.mail.Message}.
+ *  For now it sends the 'body' only thus files are skipped.
  */
 public final class MimeMsg implements BiFunc<Session, Msg, Message> {
 

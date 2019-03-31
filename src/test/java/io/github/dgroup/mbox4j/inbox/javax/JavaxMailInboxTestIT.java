@@ -50,7 +50,6 @@ import org.llorllale.cactoos.matchers.HasValues;
  * @checkstyle MagicNumberCheck (500 lines)
  * @checkstyle JavadocMethodCheck (500 lines)
  * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
- * @todo #/DEV Enable test once the SMTP server is UP and available for reading.
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class JavaxMailInboxTestIT {
@@ -84,7 +83,7 @@ public final class JavaxMailInboxTestIT {
      * Read range of emails from the dedicated SMTP server.
      * @param quantity The quantity of messages to be fetched from SMTP server.
      * @return The emails.
-     * @throws EmailException Шn case of connectivity issues.
+     * @throws EmailException In the case of connectivity issues.
      */
     private Iterable<Msg> read(final int quantity) throws EmailException {
         final Mode mode = new ModeOf("first several emails");
