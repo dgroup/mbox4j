@@ -31,9 +31,7 @@
   <version>0.0.0</version>
   <packaging>jar</packaging>
   <name>${project.artifactId}</name>
-  <description>
-    Simplify manipulations with CLI terminal(s) for Java-based applications
-  </description>
+  <description>Simplify manipulations with CLI terminal(s) for Java-based applications</description>
   <url>http://github.com/dgroup/mbox4j</url>
   <licenses>
     <license>
@@ -61,9 +59,7 @@
     <!-- Application properties -->
     <build.version>${project.version}</build.version>
     <license>MIT License</license>
-    <license.url>
-      https://github.com/dgroup/mbox4j/blob/master/license.txt
-    </license.url>
+    <license.url>https://github.com/dgroup/mbox4j/blob/master/license.txt</license.url>
     <!-- System, mvn plugins, etc -->
     <jdk.version>1.8</jdk.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -80,7 +76,7 @@
     <mvn.gpg.version>1.5</mvn.gpg.version>
     <mvn.properties.version>1.0.0</mvn.properties.version>
     <jacoco.version>0.7.9</jacoco.version>
-    <qulice.version>0.18.9</qulice.version>
+    <qulice.version>0.18.13</qulice.version>
     <sonar.version>3.4.0.905</sonar.version>
     <commons-logging.version>1.2</commons-logging.version>
     <!-- General dependencies -->
