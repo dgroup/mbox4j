@@ -69,7 +69,7 @@ public static void main(final String[] args) {
     }
 }
 ```
-See [Gmail](src/main/java/io/github/dgroup/mbox4j/GmailSmtpProperties.java) SMTP connection properties as an example of a configuration for reading procedure.
+See [Gmail](src/test/java/io/github/dgroup/mbox4j/GmailSmtpProperties.java) SMTP connection properties as an example of a configuration for reading procedure.
 ### [Outbox](src/main/java/io/github/dgroup/mbox4j/Outbox.java)
 #### [JavaxMailOutbox](src/main/java/io/github/dgroup/mbox4j/outbox/javax/JavaxMailInboxTest.java)
 Send an email to the target recipients using `javax.mail` framework:
@@ -92,4 +92,4 @@ public static void main(final String[] args) {
     );
 }
 ```
-See [Gmail](src/main/java/io/github/dgroup/mbox4j/GmailSmtpProperties.java) SMTP connection properties as an example of a configuration for sending procedure. 
+See [Gmail](src/test/java/io/github/dgroup/mbox4j/GmailSmtpProperties.java) SMTP connection properties as an example of a configuration for sending procedure. 
