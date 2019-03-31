@@ -54,9 +54,13 @@ public final class MimeMsg implements BiFunc<Session, Msg, Message> {
         email.setRecipients(Message.RecipientType.CC, new Addresses(msg.cc()).value());
         email.setRecipients(Message.RecipientType.BCC, new Addresses(msg.bcc()).value());
         email.setSubject(msg.subject().asString());
-        email.setText(msg.body().asString());
-        if (!msg.attachments().isEmpty()) {
+        if (msg.attachments().isEmpty()) {
+            email.setText(msg.body().asString());
+        } else {
             final Multipart multipart = new MimeMultipart();
+            final MimeBodyPart text = new MimeBodyPart();
+            text.setText(msg.body().asString());
+            multipart.addBodyPart(text);
             for (final File attachment : msg.attachments()) {
                 final MimeBodyPart part = new MimeBodyPart();
                 final DataSource source = new FileDataSource(attachment);

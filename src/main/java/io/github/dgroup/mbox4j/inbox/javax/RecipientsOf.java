@@ -22,46 +22,42 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.inbox.javax.search.mode;
+package io.github.dgroup.mbox4j.inbox.javax;
 
-import io.github.dgroup.mbox4j.Msg;
-import io.github.dgroup.mbox4j.inbox.javax.ToMsg;
-import java.util.ArrayList;
-import javax.mail.Folder;
+import java.util.Collections;
+import java.util.Set;
+import javax.mail.Address;
 import javax.mail.Message;
-import org.cactoos.Func;
 import org.cactoos.collection.Mapped;
+import org.cactoos.set.SetEnvelope;
+import org.cactoos.set.SetOf;
 
 /**
- * Search mode within the email folder which is fetching all emails
- *  using {@link javax.mail}.
+ * The email recipients based on their type for the dedicated message.
  *
  * @since 0.1.0
  */
-public final class All implements Func<Folder, Iterable<Msg>> {
-
-    /**
-     * The function to map {@link javax.mail.Message} to {@link Msg}.
-     */
-    private final Func<Message, Msg> fnc;
+public final class RecipientsOf extends SetEnvelope<String> {
 
     /**
      * Ctor.
+     * @param type The type of recipients.
+     * @param msg The message with recipients.
      */
-    public All() {
-        this(new ToMsg());
-    }
-
-    /**
-     * Ctor.
-     * @param fnc The function to map {@link javax.mail.Message} to {@link Msg}.
-     */
-    public All(final Func<Message, Msg> fnc) {
-        this.fnc = fnc;
-    }
-
-    @Override
-    public Iterable<Msg> apply(final Folder folder) throws Exception {
-        return new ArrayList<>(new Mapped<>(this.fnc, folder.getMessages()));
+    public RecipientsOf(final Message.RecipientType type, final Message msg) {
+        super(
+            () -> {
+                final Address[] addresses = msg.getRecipients(type);
+                final Set<String> recipients;
+                if (addresses == null || addresses.length == 0) {
+                    recipients = Collections.emptySet();
+                } else {
+                    recipients = new SetOf<>(
+                        new Mapped<>(Address::toString, addresses)
+                    );
+                }
+                return recipients;
+            }
+        );
     }
 }

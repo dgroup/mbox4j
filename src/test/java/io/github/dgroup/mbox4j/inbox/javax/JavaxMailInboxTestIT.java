@@ -32,9 +32,11 @@ import io.github.dgroup.mbox4j.inbox.javax.search.mode.Modes;
 import io.github.dgroup.mbox4j.query.QueryOf;
 import io.github.dgroup.mbox4j.query.mode.Mode;
 import io.github.dgroup.mbox4j.query.mode.ModeOf;
+import java.io.File;
 import java.util.ArrayList;
 import javax.mail.Folder;
 import org.cactoos.Func;
+import org.cactoos.collection.Joined;
 import org.cactoos.collection.Mapped;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
@@ -58,7 +60,7 @@ public final class JavaxMailInboxTestIT {
     public void size() {
         new Assertion<>(
             "3 emails were read",
-            () -> this.read(3),
+            () -> this.read(1, 3),
             Matchers.iterableWithSize(3)
         ).affirm();
     }
@@ -69,7 +71,7 @@ public final class JavaxMailInboxTestIT {
             "3 emails have expected subject",
             () -> new Mapped<>(
                 msg -> msg.subject().asString(),
-                this.read(3)
+                this.read(1, 3)
             ),
             new HasValues<>(
                 "The first email",
@@ -79,18 +81,33 @@ public final class JavaxMailInboxTestIT {
         ).affirm();
     }
 
+    @Test
+    public void attachments() {
+        new Assertion<>(
+            "2 file names from email has expected names",
+            () -> new Mapped<>(
+                File::getName,
+                new Joined<>(
+                    new Mapped<>(Msg::attachments, this.read(4, 4))
+                )
+            ),
+            new HasValues<>(".gitignore", ".pdd")
+        ).affirm();
+    }
+
     /**
      * Read range of emails from the dedicated SMTP server.
-     * @param quantity The quantity of messages to be fetched from SMTP server.
+     * @param start
+     * @param end
      * @return The emails.
      * @throws EmailException In the case of connectivity issues.
      */
-    private Iterable<Msg> read(final int quantity) throws EmailException {
+    private Iterable<Msg> read(final int start, final int end) throws EmailException {
         final Mode mode = new ModeOf("first several emails");
         final Query query = new QueryOf("imaps", "INBOX", mode);
         final Func<Folder, Iterable<Msg>> fnc = folder -> new ArrayList<>(
             new Mapped<>(
-                new ToMsg(), folder.getMessages(1, quantity)
+                new ToMsg(), folder.getMessages(start, end)
             )
         );
         return new JavaxMailInbox(
@@ -98,4 +115,5 @@ public final class JavaxMailInboxTestIT {
             new Modes(new MapOf<>(new MapEntry<>(mode, fnc)))
         ).read(query);
     }
+
 }

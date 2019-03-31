@@ -26,14 +26,15 @@ package io.github.dgroup.mbox4j.inbox.javax;
 
 import io.github.dgroup.mbox4j.Msg;
 import io.github.dgroup.mbox4j.msg.MsgOf;
-import java.util.Collections;
-import java.util.Set;
-import javax.mail.Address;
+import java.io.File;
+import java.util.Collection;
+import java.util.LinkedList;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.Part;
 import org.cactoos.Func;
-import org.cactoos.collection.Mapped;
-import org.cactoos.set.SetOf;
+import org.cactoos.Scalar;
 
 /**
  * The function to map {@link javax.mail.Message} and {@link Msg}.
@@ -43,43 +44,86 @@ import org.cactoos.set.SetOf;
  *  text-based thus we need to define a way how to send the files.
  *  For now <em>Collections.emptySet</em> is used as a stub and should be
  *  removed later.
- * @todo #/DEV Message content: transform MimeMultipart to String
- *  For now the body content <em> msg.getContent().toString() </em>
- *  looks as <em>... body=javax.mail.internet.MimeMultipart@35a50a4c ...</em>.
  */
 public final class ToMsg implements Func<Message, Msg> {
 
+    /**
+     * The temporal directory for the email attachments.
+     */
+    private final Scalar<File> tmp;
+
+    /**
+     * Ctor.
+     */
+    public ToMsg() {
+        this(() -> new File(".tmp"));
+    }
+
+    /**
+     * Ctor.
+     * @param tmp The temporal directory for the email attachments.
+     */
+    public ToMsg(final Scalar<File> tmp) {
+        this.tmp = tmp;
+    }
+
     @Override
     public Msg apply(final Message msg) throws Exception {
+        this.createTemporalDirectoryIfAbsent();
+        final Object content = msg.getContent();
+        final StringBuilder body = new StringBuilder();
+        final Collection<File> attachments = new LinkedList<>();
+        if (textPlain(msg)) {
+            body.append(content.toString());
+        } else if (content instanceof Multipart) {
+            final Multipart multipart = (Multipart) content;
+            for (final Part part : new PartsOf(multipart)) {
+                if (textPlain(part)) {
+                    body.append(part.getContent().toString());
+                } else if (Part.ATTACHMENT.equals(part.getDisposition())) {
+                    attachments.add(new AttachmentOf(part, this.tmp).value());
+                }
+            }
+        }
         return new MsgOf(
             msg.getFrom()[0].toString(),
-            recipients(Message.RecipientType.TO, msg),
-            recipients(Message.RecipientType.CC, msg),
-            recipients(Message.RecipientType.BCC, msg),
+            new RecipientsOf(Message.RecipientType.TO, msg),
+            new RecipientsOf(Message.RecipientType.CC, msg),
+            new RecipientsOf(Message.RecipientType.BCC, msg),
             msg.getSubject(),
-            msg.getContent().toString(),
-            Collections.emptySet()
+            body.toString(),
+            attachments
         );
     }
 
     /**
-     * Fetch the recipients based on their type from the message.
-     * @param type The type of recipients.
-     * @param msg The message with recipients.
-     * @return The recipients.
-     * @throws MessagingException In case if recipients can't be retrieved.
+     * Create the temporal directory for the attachments from the email.
+     * @throws Exception In case if temporal directory can't be detected
+     *  or created.
      */
-    private static Set<String> recipients(final Message.RecipientType type, final Message msg)
-        throws MessagingException {
-        final Address[] addresses = msg.getRecipients(type);
-        final Set<String> recipients;
-        if (addresses == null || addresses.length == 0) {
-            recipients = Collections.emptySet();
-        } else {
-            recipients = new SetOf<>(
-                new Mapped<>(Address::toString, addresses)
+    private void createTemporalDirectoryIfAbsent() throws Exception {
+        final File ftmp = this.tmp.value();
+        if (ftmp.exists() && ftmp.isDirectory()) {
+            return;
+        }
+        if (!ftmp.exists() && !ftmp.mkdir()) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Can't initiate the '%s' as temporal directory for email storing",
+                    ftmp.getAbsolutePath()
+                )
             );
         }
-        return recipients;
+    }
+
+    /**
+     * Ensure that {@link javax.mail.Part} has content `text/plain`.
+     * @param part The original part.
+     * @return The true when type is matched.
+     * @throws MessagingException In the case of connectivity issues.
+     * @see Part#getContentType()
+     */
+    private static boolean textPlain(final Part part) throws MessagingException {
+        return part.getContentType().contains("text/plain");
     }
 }

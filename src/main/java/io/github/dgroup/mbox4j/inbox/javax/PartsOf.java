@@ -22,46 +22,38 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.inbox.javax.search.mode;
+package io.github.dgroup.mbox4j.inbox.javax;
 
-import io.github.dgroup.mbox4j.Msg;
-import io.github.dgroup.mbox4j.inbox.javax.ToMsg;
 import java.util.ArrayList;
-import javax.mail.Folder;
-import javax.mail.Message;
-import org.cactoos.Func;
-import org.cactoos.collection.Mapped;
+import java.util.Collection;
+import javax.mail.Multipart;
+import javax.mail.Part;
+import org.cactoos.iterable.IterableEnvelope;
 
 /**
- * Search mode within the email folder which is fetching all emails
- *  using {@link javax.mail}.
+ * Represents all parts of {@link javax.mail.Multipart} as an {@link Iterable}.
  *
  * @since 0.1.0
+ * @todo #/DEV Add hierarchical unwrap as multipart can have tree-based structure.
+ *  For example, the multipart can have few levels with multipart(s).
  */
-public final class All implements Func<Folder, Iterable<Msg>> {
-
-    /**
-     * The function to map {@link javax.mail.Message} to {@link Msg}.
-     */
-    private final Func<Message, Msg> fnc;
+public final class PartsOf extends IterableEnvelope<Part> {
 
     /**
      * Ctor.
+     * @param multipart The content of email message.
      */
-    public All() {
-        this(new ToMsg());
+    public PartsOf(final Multipart multipart) {
+        super(
+            () -> {
+                final int quantity = multipart.getCount();
+                final Collection<Part> parts = new ArrayList<>(quantity);
+                for (int idx = 0; idx < quantity; ++idx) {
+                    parts.add(multipart.getBodyPart(idx));
+                }
+                return parts;
+            }
+        );
     }
 
-    /**
-     * Ctor.
-     * @param fnc The function to map {@link javax.mail.Message} to {@link Msg}.
-     */
-    public All(final Func<Message, Msg> fnc) {
-        this.fnc = fnc;
-    }
-
-    @Override
-    public Iterable<Msg> apply(final Folder folder) throws Exception {
-        return new ArrayList<>(new Mapped<>(this.fnc, folder.getMessages()));
-    }
 }
