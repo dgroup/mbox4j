@@ -25,6 +25,7 @@
 package io.github.dgroup.mbox4j;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Set;
 import org.cactoos.Text;
 
@@ -77,5 +78,5 @@ public interface Msg {
      * The attachments within the email.
      * @return The attachments.
      */
-    Iterable<File> attachments();
+    Collection<File> attachments();
 }

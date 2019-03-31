@@ -26,37 +26,41 @@ package io.github.dgroup.mbox4j.msg;
 
 import io.github.dgroup.mbox4j.Msg;
 import java.io.File;
+import java.util.Collection;
 import java.util.Set;
 import org.cactoos.Text;
+import org.cactoos.collection.CollectionOf;
 
 /**
  * The fake implementation of {@link Msg} for unit testing purposes.
  *
  * @since 0.1.0
  * @checkstyle MemberNameCheck (200 lines)
+ * @checkstyle ParameterNameCheck (200 lines)
+ * @checkstyle ParameterNumberCheck (200 lines)
  */
-@SuppressWarnings("PMD.ShortMethodName")
+@SuppressWarnings({"PMD.ShortMethodName", "PMD.AvoidFieldNameMatchingMethodName"})
 public final class FakeMsg implements Msg {
 
     /**
      * The sender's email address.
      */
-    private final Text frm;
+    private final Text from;
 
     /**
      * The target email recipients.
      */
-    private final Set<Text> recipients;
+    private final Set<Text> to;
 
     /**
      * The target email recipients for the `CC` (carbon copy).
      */
-    private final Set<Text> copy;
+    private final Set<Text> cc;
 
     /**
      * The target email recipients for the `BCC` (blind carbon copy).
      */
-    private final Set<Text> bcopy;
+    private final Set<Text> bcc;
 
     /**
      * The subject of the email message.
@@ -71,50 +75,67 @@ public final class FakeMsg implements Msg {
     /**
      * The message attachments.
      */
-    private final Iterable<File> attachs;
+    private final Collection<File> attachments;
 
     /**
      * Ctor.
-     * @param frm The sender's email address.
-     * @param recipients The target email recipients.
-     * @param copy The target email recipients for the `CC` (carbon copy).
-     * @param bcopy The target email recipients for the `BCC` (blind carbon copy).
+     * @param from The sender's email address.
+     * @param to The target email recipients.
+     * @param cc The target email recipients for the `CC` (carbon copy).
+     * @param bcc The target email recipients for the `BCC` (blind carbon copy).
      * @param subj The subject of the email message.
-     * @param content The message content.
-     * @param attachs The message attachments.
+     * @param body The message content.
+     * @param attachments The message attachments.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public FakeMsg(
-        final Text frm, final Set<Text> recipients, final Set<Text> copy, final Set<Text> bcopy,
-        final Text subj, final Text content, final Iterable<File> attachs
+        final Text from, final Set<Text> to, final Set<Text> cc, final Set<Text> bcc,
+        final Text subj, final Text body, final File... attachments
     ) {
-        this.frm = frm;
-        this.recipients = recipients;
-        this.copy = copy;
-        this.bcopy = bcopy;
+        this(from, to, cc, bcc, subj, body, new CollectionOf<>(attachments));
+    }
+
+    /**
+     * Ctor.
+     * @param from The sender's email address.
+     * @param to The target email recipients.
+     * @param cc The target email recipients for the `CC` (carbon copy).
+     * @param bcc The target email recipients for the `BCC` (blind carbon copy).
+     * @param subj The subject of the email message.
+     * @param body The message content.
+     * @param attachments The message attachments.
+     */
+    public FakeMsg(
+        final Text from, final Set<Text> to, final Set<Text> cc, final Set<Text> bcc,
+        final Text subj, final Text body, final Collection<File> attachments
+    ) {
+        this.from = from;
+        this.to = to;
+        this.cc = cc;
+        this.bcc = bcc;
         this.subj = subj;
-        this.content = content;
-        this.attachs = attachs;
+        this.content = body;
+        this.attachments = attachments;
     }
 
     @Override
     public Text from() {
-        return this.frm;
+        return this.from;
     }
 
     @Override
     public Set<Text> to() {
-        return this.recipients;
+        return this.to;
     }
 
     @Override
     public Set<Text> cc() {
-        return this.copy;
+        return this.cc;
     }
 
     @Override
     public Set<Text> bcc() {
-        return this.bcopy;
+        return this.bcc;
     }
 
     @Override
@@ -128,8 +149,7 @@ public final class FakeMsg implements Msg {
     }
 
     @Override
-    public Iterable<File> attachments() {
-        return this.attachs;
+    public Collection<File> attachments() {
+        return this.attachments;
     }
-
 }

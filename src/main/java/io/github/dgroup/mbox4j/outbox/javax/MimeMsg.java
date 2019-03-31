@@ -25,10 +25,17 @@
 package io.github.dgroup.mbox4j.outbox.javax;
 
 import io.github.dgroup.mbox4j.Msg;
+import java.io.File;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.Message;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import org.cactoos.BiFunc;
 
 /**
@@ -36,8 +43,6 @@ import org.cactoos.BiFunc;
  *  from {@link Msg}.
  *
  * @since 0.1.0
- * @todo #/DEV Add attachments to the {@link javax.mail.Message}.
- *  For now it sends the 'body' only thus files are skipped.
  */
 public final class MimeMsg implements BiFunc<Session, Msg, Message> {
 
@@ -50,6 +55,17 @@ public final class MimeMsg implements BiFunc<Session, Msg, Message> {
         email.setRecipients(Message.RecipientType.BCC, new Addresses(msg.bcc()).value());
         email.setSubject(msg.subject().asString());
         email.setText(msg.body().asString());
+        if (!msg.attachments().isEmpty()) {
+            final Multipart multipart = new MimeMultipart();
+            for (final File attachment : msg.attachments()) {
+                final MimeBodyPart part = new MimeBodyPart();
+                final DataSource source = new FileDataSource(attachment);
+                part.setDataHandler(new DataHandler(source));
+                part.setFileName(attachment.getName());
+                multipart.addBodyPart(part);
+            }
+            email.setContent(multipart);
+        }
         return email;
     }
 }

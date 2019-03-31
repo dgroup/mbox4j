@@ -29,6 +29,10 @@ import io.github.dgroup.mbox4j.YandexOutgoingSmtpProperties;
 import io.github.dgroup.mbox4j.msg.MsgOf;
 import io.github.dgroup.term4j.arg.ArgNotFoundException;
 import io.github.dgroup.term4j.arg.PropOf;
+import java.io.File;
+import java.util.Collections;
+import java.util.Set;
+import org.cactoos.set.SetOf;
 import org.junit.Test;
 
 /**
@@ -36,6 +40,7 @@ import org.junit.Test;
  *
  * @since 0.1.0
  * @checkstyle JavadocMethodCheck (500 lines)
+ * @checkstyle LocalFinalVariableNameCheck (500 lines)
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class JavaxMailOutboxTestIT {
@@ -48,15 +53,15 @@ public final class JavaxMailOutboxTestIT {
      */
     @Test
     public void sendFromYandexAccount() throws EmailException, ArgNotFoundException {
+        final String from = new PropOf("LL.yandex.user").value();
+        final Set<String> to = new SetOf<>(new PropOf("LL.yandex.to.user").value());
+        final Set<String> cc = Collections.emptySet();
+        final Set<String> bcc = Collections.emptySet();
+        final Set<File> attachments = new SetOf<>(new File(".gitignore"), new File(".pdd"));
         new JavaxMailOutbox(
             new YandexOutgoingSmtpProperties()
         ).send(
-            new MsgOf(
-                new PropOf("LL.yandex.user").value(),
-                new PropOf("LL.yandex.to.user").value(),
-                "Testing subj",
-                "I'm simple and i know it."
-            )
+            new MsgOf(from, to, cc, bcc, "Testing subj", "I'm simple and i know it.", attachments)
         );
     }
 }

@@ -26,6 +26,7 @@ package io.github.dgroup.mbox4j.msg;
 
 import io.github.dgroup.mbox4j.Msg;
 import java.io.File;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 import org.cactoos.Text;
@@ -85,7 +86,7 @@ public class MsgEnvelope implements Msg {
     }
 
     @Override
-    public final Iterable<File> attachments() {
+    public final Collection<File> attachments() {
         return this.origin.attachments();
     }
 
