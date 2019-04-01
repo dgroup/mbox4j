@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import javax.mail.MessagingException;
 import javax.mail.Part;
 import org.cactoos.Scalar;
 import org.cactoos.io.InputOf;
@@ -72,12 +73,11 @@ public final class AttachmentOf implements Scalar<File> {
             final Path dest = Paths.get(
                 this.tmp.value().getAbsolutePath(), this.part.getFileName()
             );
-            try (BufferedInputStream inp = new BufferedInputStream(this.part.getInputStream());
-                 BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(dest))) {
+            try (BufferedInputStream src = this.src(); BufferedOutputStream target = out(dest)) {
                 new LengthOf(
                     new TeeInput(
-                        new InputOf(inp),
-                        new OutputTo(out)
+                        new InputOf(src),
+                        new OutputTo(target)
                     )
                 ).intValue();
             }
@@ -86,5 +86,25 @@ public final class AttachmentOf implements Scalar<File> {
         } catch (final Exception cause) {
             throw new IOException(cause);
         }
+    }
+
+    /**
+     * The source stream of the attachment.
+     * @return The attachment content.
+     * @throws IOException In case of exception during reading procedure.
+     * @throws MessagingException In case connectivity exception.
+     */
+    private BufferedInputStream src() throws IOException, MessagingException {
+        return new BufferedInputStream(this.part.getInputStream());
+    }
+
+    /**
+     * The destination stream of the attachment.
+     * @param dest The destination/target path of the attachment.
+     * @return The attachment content.
+     * @throws IOException In case connectivity exception.
+     */
+    private static BufferedOutputStream out(final Path dest) throws IOException {
+        return new BufferedOutputStream(Files.newOutputStream(dest));
     }
 }
