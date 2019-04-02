@@ -3,6 +3,7 @@
 # Circleci docker & java: https://circleci.com/docs/2.0/building-docker-images
 # Environment variables:  https://circleci.com/docs/2.0/env-vars
 # Verify circleci *.yml:  https://circleci.com/docs/2.0/local-cli
+#
 version: 2
 jobs:
   assemble_jar:
@@ -19,7 +20,7 @@ jobs:
     - run:
         name: Build java sources (including integration tests)
         command: |
-          mvn -X -P integration-tests clean install -DLL.yandex.user=${EMAIL_USER} -DLL.yandex.pass=${EMAIL_PASS} -DLL.yandex.to.user=${EMAIL_TO}
+          mvn -X -P qulice,integration-tests clean install -DLL.yandex.user=${EMAIL_USER} -DLL.yandex.pass=${EMAIL_PASS} -DLL.yandex.to.user=${EMAIL_TO}
 
 workflows:
   version: 2

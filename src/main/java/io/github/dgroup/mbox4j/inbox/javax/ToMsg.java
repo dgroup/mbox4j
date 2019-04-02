@@ -40,10 +40,6 @@ import org.cactoos.Scalar;
  * The function to map {@link javax.mail.Message} and {@link Msg}.
  *
  * @since 0.1.0
- * @todo #/DEV Add the support of attachments. For now all emails are
- *  text-based thus we need to define a way how to send the files.
- *  For now <em>Collections.emptySet</em> is used as a stub and should be
- *  removed later.
  */
 public final class ToMsg implements Func<Message, Msg> {
 
