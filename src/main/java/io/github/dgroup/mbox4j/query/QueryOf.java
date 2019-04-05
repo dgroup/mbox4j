@@ -25,7 +25,6 @@
 package io.github.dgroup.mbox4j.query;
 
 import io.github.dgroup.mbox4j.Query;
-import io.github.dgroup.mbox4j.query.mode.Mode;
 import java.util.Objects;
 
 /**
@@ -46,7 +45,7 @@ public final class QueryOf implements Query {
     private final String fld;
 
     /**
-     * The type of search mode within email folder.
+     * The type of the search mode within email folder.
      */
     private final Mode mde;
 
@@ -54,7 +53,7 @@ public final class QueryOf implements Query {
      * Ctor.
      * @param protocol The email connection protocol.
      * @param folder The root folder for search.
-     * @param mode The type of search mode within email folder.
+     * @param mode The type of the search mode within email folder.
      */
     public QueryOf(final String protocol, final String folder, final Mode mode) {
         this.pcl = protocol;

@@ -22,46 +22,26 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.inbox.javax.search.mode;
+package io.github.dgroup.mbox4j.query.mode;
 
-import io.github.dgroup.mbox4j.Msg;
-import io.github.dgroup.mbox4j.inbox.javax.ToMsg;
-import java.util.ArrayList;
-import javax.mail.Folder;
-import javax.mail.Message;
-import org.cactoos.Func;
-import org.cactoos.collection.Mapped;
+import io.github.dgroup.mbox4j.query.ArgOf;
+import io.github.dgroup.mbox4j.query.Mode;
 
 /**
- * Search mode within the email folder which is fetching all emails
- *  using {@link javax.mail}.
+ * Find range of emails based on their indexes.
+ *
+ * The indexes starts from <em>1</em>.
  *
  * @since 0.1.0
  */
-public final class All implements Func<Folder, Iterable<Msg>> {
-
-    /**
-     * The function to map {@link javax.mail.Message} to {@link Msg}.
-     */
-    private final Func<Message, Msg> fnc;
+public final class Range extends ModeEnvelope {
 
     /**
      * Ctor.
+     * @param start The start email index.
+     * @param end The end email index.
      */
-    public All() {
-        this(new ToMsg());
-    }
-
-    /**
-     * Ctor.
-     * @param fnc The function to map {@link javax.mail.Message} to {@link Msg}.
-     */
-    public All(final Func<Message, Msg> fnc) {
-        this.fnc = fnc;
-    }
-
-    @Override
-    public Iterable<Msg> apply(final Folder folder) throws Exception {
-        return new ArrayList<>(new Mapped<>(this.fnc, folder.getMessages()));
+    public Range(final Integer start, final Integer end) {
+        super(Mode.RANGE, new ArgOf("start", start.toString()), new ArgOf("end", end.toString()));
     }
 }

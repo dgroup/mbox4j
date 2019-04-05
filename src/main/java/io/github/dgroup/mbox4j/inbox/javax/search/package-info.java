@@ -22,22 +22,18 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.query.mode;
-
-import io.github.dgroup.mbox4j.query.Mode;
-import java.util.Collections;
-
 /**
- * Find all emails within folder.
+ * The classes related to search procedure within the emails
+ *  using {@link javax.mail} framework.
  *
  * @since 0.1.0
+ * @todo #/DEV From: new search mode which allows to fetch only emails from
+ *  the particular sender.
+ * @todo #/DEV HasAttachments: new search mode which allows to fetch only emails
+ *  which have the attachments.
+ * @todo #/DEV Subject: new search mode which allows to fetch only emails
+ *  with particular subject.
+ * @todo #/DEV Important: new search mode which allows to fetch only emails
+ *  which are flagged by important flag.
  */
-public final class All extends ModeEnvelope {
-
-    /**
-     * Ctor.
-     */
-    public All() {
-        super(Mode.ALL, Collections.emptyMap());
-    }
-}
+package io.github.dgroup.mbox4j.inbox.javax.search;

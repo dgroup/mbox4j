@@ -28,8 +28,8 @@ import io.github.dgroup.mbox4j.EmailException;
 import io.github.dgroup.mbox4j.Inbox;
 import io.github.dgroup.mbox4j.Msg;
 import io.github.dgroup.mbox4j.Query;
-import io.github.dgroup.mbox4j.inbox.javax.search.mode.Modes;
-import java.util.Collections;
+import io.github.dgroup.mbox4j.inbox.javax.search.Modes;
+import io.github.dgroup.mbox4j.inbox.javax.search.Search;
 import java.util.Properties;
 import javax.mail.Folder;
 import javax.mail.MessagingException;
@@ -44,8 +44,6 @@ import org.cactoos.Scalar;
  * {@code final Inbox inbox = new JavaxMailInbox(smptProperties);}
  *
  * @since 0.1.0
- * @todo #/DEV Implement search to the javax instead of fetching all messages.
- *  The search should be based on {@link Query}.
  */
 public final class JavaxMailInbox implements Inbox {
 
@@ -100,8 +98,9 @@ public final class JavaxMailInbox implements Inbox {
             folder = store.getFolder(query.folder());
             folder.open(Folder.READ_ONLY);
             return this.modes.getOrDefault(
-                query.mode(), fallback -> Collections.emptySet()
-            ).apply(folder);
+                query.mode().name(),
+                new Search.Empty()
+            ).apply(query, folder);
             // @checkstyle IllegalCatchCheck (3 lines)
         } catch (final Exception cause) {
             throw new EmailException(cause);

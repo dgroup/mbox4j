@@ -22,18 +22,42 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.query.mode;
+package io.github.dgroup.mbox4j.inbox.javax.search;
+
+import io.github.dgroup.mbox4j.EmailException;
+import io.github.dgroup.mbox4j.Msg;
+import io.github.dgroup.mbox4j.Query;
+import java.util.Collections;
+import javax.mail.Folder;
+import org.cactoos.BiFunc;
 
 /**
- * The type of search mode within email folder.
+ * The search within email folder.
  *
  * @since 0.1.0
+ * @todo #/DEV Add documentation about {@link io.github.dgroup.mbox4j.inbox.javax.search}
+ *  to the <em>readme.md</em>.
  */
-public interface Mode {
+public interface Search extends BiFunc<Query, Folder, Iterable<Msg>> {
 
     /**
-     * The name of type of search within email folder.
-     * @return The name of mode.
+     * Search the emails.
+     * @param query The search details.
+     * @param folder The email folder.
+     * @return The emails.
+     * @throws EmailException In the case of connectivity/transformation issues.
      */
-    String name();
+    Iterable<Msg> apply(Query query, Folder folder) throws EmailException;
+
+    /**
+     * The search which returns empty result.
+     * @since 0.1.0
+     */
+    class Empty implements Search {
+
+        @Override
+        public Iterable<Msg> apply(final Query query, final Folder folder) {
+            return Collections.emptySet();
+        }
+    }
 }

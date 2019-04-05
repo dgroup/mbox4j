@@ -22,22 +22,25 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.query.mode;
+package io.github.dgroup.mbox4j.inbox.javax.search;
 
 import io.github.dgroup.mbox4j.query.Mode;
-import java.util.Collections;
+import org.cactoos.iterable.IterableOf;
 
 /**
- * Find all emails within folder.
+ * Search mode within the email folder which is fetching all emails
+ *  using {@link javax.mail}.
  *
  * @since 0.1.0
+ * @todo #/DEV All#search - Add integration test
  */
-public final class All extends ModeEnvelope {
+public final class All extends SearchOf {
 
     /**
      * Ctor.
      */
     public All() {
-        super(Mode.ALL, Collections.emptyMap());
+        super((query, folder) -> new IterableOf<>(folder.getMessages()), Mode.ALL);
     }
+
 }

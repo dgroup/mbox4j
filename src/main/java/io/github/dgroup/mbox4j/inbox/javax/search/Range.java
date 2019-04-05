@@ -22,55 +22,35 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.query.mode;
+package io.github.dgroup.mbox4j.inbox.javax.search;
 
-import java.util.Objects;
+import io.github.dgroup.mbox4j.query.Mode;
+import org.cactoos.iterable.IterableOf;
 
 /**
- * Search mode within email folder.
+ * Search mode within the email folder which is fetching emails
+ *  based on their indexes using {@link javax.mail}.
+ *
+ * The indexing starts from <em>1</em>.
  *
  * @since 0.1.0
+ * @todo #/DEV Range#search - add integration test
  */
-public class ModeOf implements Mode {
-
-    /**
-     * The type of search mode within email folder.
-     */
-    private final String mode;
+public final class Range extends SearchOf {
 
     /**
      * Ctor.
-     * @param mode The type of search mode within email folder.
      */
-    public ModeOf(final String mode) {
-        this.mode = mode;
+    public Range() {
+        super(
+            (query, folder) -> {
+                final String zero = "0";
+                final int start = Integer.parseInt(query.mode().argument("start", zero));
+                final int end = Integer.parseInt(query.mode().argument("end", zero));
+                return new IterableOf<>(folder.getMessages(start, end));
+            },
+            Mode.RANGE
+        );
     }
 
-    @Override
-    public final String name() {
-        return this.mode;
-    }
-
-    @Override
-    @SuppressWarnings("PMD.OnlyOneReturn")
-    public final boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof Mode)) {
-            return false;
-        }
-        final Mode that = (Mode) obj;
-        return Objects.equals(this.name(), that.name());
-    }
-
-    @Override
-    public final int hashCode() {
-        return Objects.hash(this.name());
-    }
-
-    @Override
-    public final String toString() {
-        return this.name();
-    }
 }

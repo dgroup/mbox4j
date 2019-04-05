@@ -22,37 +22,37 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.inbox;
+package io.github.dgroup.mbox4j.inbox.javax.search;
 
-import io.github.dgroup.mbox4j.EmailException;
-import io.github.dgroup.mbox4j.Msg;
-import io.github.dgroup.mbox4j.Query;
-import org.cactoos.Func;
+import io.github.dgroup.mbox4j.query.Mode;
+import java.util.concurrent.atomic.AtomicInteger;
+import javax.mail.Flags.Flag;
+import org.cactoos.iterable.Filtered;
 
 /**
- * The email inbox.
- *
- * @see io.github.dgroup.mbox4j.Inbox
- * @see io.github.dgroup.mbox4j.inbox.javax.func
+ * Search mode within the email folder which is fetching all recent email.
+ *  using {@link javax.mail}.
  *
  * @since 0.1.0
+ * @todo #/DEV Recent#search - add integration test
  */
-public final class InboxOf extends InboxEnvelope {
+public final class Recent extends SearchOf {
 
     /**
      * Ctor.
-     * @param fnc The function to fetch email messages based on query.
-     * @see io.github.dgroup.mbox4j.inbox.javax.func
      */
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
-    public InboxOf(final Func<Query, Iterable<Msg>> fnc) {
-        super(query -> {
-            try {
-                return fnc.apply(query);
-                // @checkstyle IllegalCatchCheck (3 lines)
-            } catch (final Exception cause) {
-                throw new EmailException(cause);
-            }
-        });
+    public Recent() {
+        super(
+            (query, folder) -> {
+                final int quantity = folder.getNewMessageCount();
+                final AtomicInteger added = new AtomicInteger(0);
+                return new Filtered<>(
+                    msg -> msg.isSet(Flag.RECENT) && added.incrementAndGet() < quantity,
+                    folder.getMessages()
+                );
+            },
+            Mode.RECENT
+        );
     }
+
 }

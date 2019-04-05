@@ -22,22 +22,48 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.query.mode;
-
-import io.github.dgroup.mbox4j.query.Mode;
-import java.util.Collections;
+package io.github.dgroup.mbox4j.query;
 
 /**
- * Find all emails within folder.
+ * The supported email search modes.
  *
  * @since 0.1.0
  */
-public final class All extends ModeEnvelope {
+public interface Mode {
 
     /**
-     * Ctor.
+     * Find all emails within particular folder.
      */
-    public All() {
-        super(Mode.ALL, Collections.emptyMap());
-    }
+    String ALL = "all";
+
+    /**
+     * Find all recent emails within particular folder.
+     */
+    String RECENT = "recent";
+
+    /**
+     * Find the range of emails based on their indexes
+     *  within particular folder.
+     * The indexes starts from <em>1</em>.
+     */
+    String RANGE = "range";
+
+    /**
+     * Find all unread emails within particular folder.
+     */
+    String UNREAD = "unread";
+
+    /**
+     * The type of the search mode.
+     * @return The name.
+     */
+    String name();
+
+    /**
+     * The argument's value within the search mode.
+     * @param name The name of the argument.
+     * @param fallback The default value in case if argument is absent.
+     * @return The value.
+     */
+    String argument(String name, String fallback);
 }

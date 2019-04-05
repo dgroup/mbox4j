@@ -24,20 +24,56 @@
 
 package io.github.dgroup.mbox4j.query.mode;
 
+import io.github.dgroup.mbox4j.query.Arg;
 import io.github.dgroup.mbox4j.query.Mode;
-import java.util.Collections;
+import java.util.Map;
+import org.cactoos.iterable.IterableOf;
+import org.cactoos.map.MapOf;
 
 /**
- * Find all emails within folder.
+ * The envelope for {@link Mode}.
  *
  * @since 0.1.0
  */
-public final class All extends ModeEnvelope {
+public class ModeEnvelope implements Mode {
+
+    /**
+     * The name of the search mode.
+     */
+    private final String label;
+
+    /**
+     * The search arguments.
+     */
+    private final Map<String, String> arg;
 
     /**
      * Ctor.
+     * @param mode The name of the search mode.
+     * @param args The search arguments.
      */
-    public All() {
-        super(Mode.ALL, Collections.emptyMap());
+    public ModeEnvelope(final String mode, final Arg... args) {
+        this(mode, new MapOf<>(Arg::name, Arg::value, new IterableOf<>(args)));
     }
+
+    /**
+     * Ctor.
+     * @param mode The name of the search mode.
+     * @param args The search arguments.
+     */
+    public ModeEnvelope(final String mode, final Map<String, String> args) {
+        this.label = mode;
+        this.arg = args;
+    }
+
+    @Override
+    public final String name() {
+        return this.label;
+    }
+
+    @Override
+    public final String argument(final String name, final String fallback) {
+        return this.arg.getOrDefault(name, fallback);
+    }
+
 }

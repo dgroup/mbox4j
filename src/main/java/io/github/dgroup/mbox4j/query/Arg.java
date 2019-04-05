@@ -22,22 +22,24 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.query.mode;
-
-import io.github.dgroup.mbox4j.query.Mode;
-import java.util.Collections;
+package io.github.dgroup.mbox4j.query;
 
 /**
- * Find all emails within folder.
+ * The single search argument.
  *
  * @since 0.1.0
  */
-public final class All extends ModeEnvelope {
+public interface Arg {
 
     /**
-     * Ctor.
+     * The label of search argument.
+     * @return The label.
      */
-    public All() {
-        super(Mode.ALL, Collections.emptyMap());
-    }
+    String name();
+
+    /**
+     * The value of search argument.
+     * @return The value.
+     */
+    String value();
 }

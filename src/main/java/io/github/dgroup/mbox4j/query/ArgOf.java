@@ -22,10 +22,42 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+package io.github.dgroup.mbox4j.query;
+
 /**
- * The classes related to search procedure within the emails
- *  using {@link javax.mail} framework.
+ * The search argument.
  *
  * @since 0.1.0
  */
-package io.github.dgroup.mbox4j.inbox.javax.search.mode;
+public final class ArgOf implements Arg {
+
+    /**
+     * The name of the argument.
+     */
+    private final String label;
+
+    /**
+     * The value of the argument.
+     */
+    private final String val;
+
+    /**
+     * Ctor.
+     * @param label The name of the argument.
+     * @param val The value of the argument.
+     */
+    public ArgOf(final String label, final String val) {
+        this.label = label;
+        this.val = val;
+    }
+
+    @Override
+    public String name() {
+        return this.label;
+    }
+
+    @Override
+    public String value() {
+        return this.val;
+    }
+}

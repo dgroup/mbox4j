@@ -62,7 +62,7 @@ public static void main(final String[] args) {
     ...
     final Inbox inbox = new JavaxMailInbox(smtp);
     final Iterable<Msg> msgs = inbox.read(
-        new Query("imaps", "INBOX", new All())
+        new Query("pop3s", "INBOX", new All())
     );
     for(final Msg msg : msgs) {
         System.out.println(msg);

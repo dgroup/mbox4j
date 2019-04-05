@@ -22,40 +22,37 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.dgroup.mbox4j.inbox.javax.search.mode;
+package io.github.dgroup.mbox4j.inbox.javax.search;
 
-import io.github.dgroup.mbox4j.Msg;
-import io.github.dgroup.mbox4j.query.mode.Mode;
-import java.util.Map;
-import javax.mail.Folder;
-import org.cactoos.Func;
-import org.cactoos.map.MapEntry;
-import org.cactoos.map.MapEnvelope;
-import org.cactoos.map.MapOf;
+import io.github.dgroup.mbox4j.query.Mode;
+import java.util.concurrent.atomic.AtomicInteger;
+import javax.mail.Flags;
+import org.cactoos.iterable.Filtered;
 
 /**
- * The search modes to be used within email folders.
+ * Search mode within the email folder which is fetching all unread email.
+ *  using {@link javax.mail}.
  *
  * @since 0.1.0
+ * @todo #/DEV Unread#search - add integration test
  */
-public final class Modes extends MapEnvelope<Mode, Func<Folder, Iterable<Msg>>> {
+public final class Unread extends SearchOf {
 
     /**
      * Ctor.
      */
-    public Modes() {
-        this(
-            new MapOf<>(
-                new MapEntry<>(new io.github.dgroup.mbox4j.query.mode.All(), new All())
-            )
+    public Unread() {
+        super(
+            (query, folder) -> {
+                final int quantity = folder.getUnreadMessageCount();
+                final AtomicInteger added = new AtomicInteger(0);
+                return new Filtered<>(
+                    msg -> !msg.isSet(Flags.Flag.SEEN) && added.incrementAndGet() < quantity,
+                    folder.getMessages()
+                );
+            },
+            Mode.RECENT
         );
     }
 
-    /**
-     * Ctor.
-     * @param modes The search modes.
-     */
-    public Modes(final Map<Mode, Func<Folder, Iterable<Msg>>> modes) {
-        super(() -> modes);
-    }
 }

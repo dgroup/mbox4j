@@ -23,8 +23,10 @@
  */
 
 /**
- * The classes related to search procedure within the emails.
+ * The supported email search types.
  *
  * @since 0.1.0
+ * @todo #/DEV Add documentation about package {@link io.github.dgroup.mbox4j.query.mode}
+ *  to the <em>readme.md</em>.
  */
 package io.github.dgroup.mbox4j.query.mode;

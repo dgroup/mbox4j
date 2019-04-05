@@ -28,16 +28,16 @@ import io.github.dgroup.mbox4j.query.Mode;
 import java.util.Collections;
 
 /**
- * Find all emails within folder.
+ * Find all recent emails within folder.
  *
  * @since 0.1.0
  */
-public final class All extends ModeEnvelope {
+public final class Recent extends ModeEnvelope {
 
     /**
      * Ctor.
      */
-    public All() {
-        super(Mode.ALL, Collections.emptyMap());
+    public Recent() {
+        super(Mode.RECENT, Collections.emptyMap());
     }
 }

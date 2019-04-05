@@ -26,20 +26,12 @@ package io.github.dgroup.mbox4j.inbox.javax;
 
 import io.github.dgroup.mbox4j.EmailException;
 import io.github.dgroup.mbox4j.Msg;
-import io.github.dgroup.mbox4j.Query;
 import io.github.dgroup.mbox4j.YandexIncomingSmtpProperties;
-import io.github.dgroup.mbox4j.inbox.javax.search.mode.Modes;
 import io.github.dgroup.mbox4j.query.QueryOf;
-import io.github.dgroup.mbox4j.query.mode.Mode;
-import io.github.dgroup.mbox4j.query.mode.ModeOf;
+import io.github.dgroup.mbox4j.query.mode.Range;
 import java.io.File;
-import java.util.ArrayList;
-import javax.mail.Folder;
-import org.cactoos.Func;
 import org.cactoos.collection.Joined;
 import org.cactoos.collection.Mapped;
-import org.cactoos.map.MapEntry;
-import org.cactoos.map.MapOf;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.llorllale.cactoos.matchers.Assertion;
@@ -96,24 +88,17 @@ public final class JavaxMailInboxTestIT {
     }
 
     /**
-     * Read range of emails from the dedicated SMTP server.
+     * Read the range of emails from the dedicated SMTP server.
      * @param start
      * @param end
      * @return The emails.
      * @throws EmailException In the case of connectivity issues.
      */
     private Iterable<Msg> read(final int start, final int end) throws EmailException {
-        final Mode mode = new ModeOf("first several emails");
-        final Query query = new QueryOf("imaps", "INBOX", mode);
-        final Func<Folder, Iterable<Msg>> fnc = folder -> new ArrayList<>(
-            new Mapped<>(
-                new ToMsg(), folder.getMessages(start, end)
-            )
-        );
         return new JavaxMailInbox(
-            new YandexIncomingSmtpProperties(),
-            new Modes(new MapOf<>(new MapEntry<>(mode, fnc)))
-        ).read(query);
+            new YandexIncomingSmtpProperties()
+        ).read(
+            new QueryOf("imaps", "INBOX", new Range(start, end))
+        );
     }
-
 }
