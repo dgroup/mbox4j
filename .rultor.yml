@@ -4,9 +4,6 @@ architect:
 readers:
   - "urn:github:1651114"
 
-# @todo #/DEV Generate the pubring.gpg and secring.gpg for rultor.
-#  Define a new mvn profile `ossrh-mbox4j` for integration with mvn central.
-
 # @todo #/DEV Configure the deployment to staging environment in order to work with RC
 #  https://help.sonatype.com/repomanager2/staging-releases/staging-overview
 #  https://help.sonatype.com/repomanager2/staging-releases/configuring-your-project-for-deployment
@@ -17,8 +14,8 @@ readers:
 #  https://danielkummer.github.io/git-flow-cheatsheet/index.html
 assets:
   settings.xml: "dgroup/ossrh#settings.xml"
-  pubring.gpg:  "dgroup/ossrh#1B112A24-term4j-pubring.gpg"
-  secring.gpg:  "dgroup/ossrh#1B112A24-term4j-secring.gpg"
+  pubring.gpg:  "dgroup/ossrh#8F0C7E69-mbox4j-pubring.gpg"
+  secring.gpg:  "dgroup/ossrh#8F0C7E69-mbox4j-secring.gpg"
 
 merge:
   env:
