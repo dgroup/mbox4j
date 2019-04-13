@@ -32,13 +32,16 @@ import io.github.dgroup.mbox4j.query.Mode;
  * @since 0.1.0
  * @todo #/DEV Use {@link org.cactoos.Text} instead raw String for manipulation
  *  with text.
- * @todo #/DEV Clarify the types of supported connection protocols
- *  for {@link this#protocol()}
  */
 public interface Query {
 
     /**
      * The email connection protocol.
+     * Supported values are:
+     *  - <em>pop3</em>
+     *  - <em>pop3s</em>
+     *  - <em>imap</em>
+     *  - <em>imaps</em>.
      * @return The protocol
      */
     String protocol();

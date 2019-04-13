@@ -52,6 +52,11 @@ public final class QueryOf implements Query {
     /**
      * Ctor.
      * @param protocol The email connection protocol.
+     *  Supported values are:
+     *  - <em>pop3</em>
+     *  - <em>pop3s</em>
+     *  - <em>imap</em>
+     *  - <em>imaps</em>.
      * @param folder The root folder for search.
      * @param mode The type of the search mode within email folder.
      */
