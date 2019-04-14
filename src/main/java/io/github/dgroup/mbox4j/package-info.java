@@ -26,5 +26,7 @@
  * The postman(s) for email sending.
  *
  * @since 0.1.0
+ * @todo #/DEV Add instructions to readme.md regarding <em>javax.mail</em>
+ *  dependency (or other libs) in order to avoid java.lang.NoClassDefFoundError.
  */
 package io.github.dgroup.mbox4j;

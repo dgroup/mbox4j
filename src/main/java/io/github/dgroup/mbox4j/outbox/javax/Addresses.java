@@ -37,6 +37,8 @@ import org.cactoos.text.Joined;
  *  objects in accordance with RFC822 syntax.
  *
  * @since 0.1.0
+ * @todo #/DEV Change the email to LowLevel case in order to prevent duplication of emails
+ *  due to different case.
  */
 public final class Addresses implements Scalar<InternetAddress[]> {
 

@@ -33,6 +33,9 @@ import org.cactoos.Scalar;
  * Gmail incoming/outgoing SMTP server properties.
  *
  * @since 0.1.0
+ * @todo #/DEV Move the smtp properties to the src/main/java module
+ *  as it can be used for other repositories.
+ *  The new package is <em>io.github.dgroup.mbox4j.properties</em>.
  */
 public final class GmailSmtpProperties implements Scalar<Properties> {
 

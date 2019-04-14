@@ -56,6 +56,14 @@ public class JavaxMailOutbox implements Outbox {
      * Ctor.
      * @param props The postman configuration properties.
      */
+    public JavaxMailOutbox(final Properties props) {
+        this(() -> props);
+    }
+
+    /**
+     * Ctor.
+     * @param props The postman configuration properties.
+     */
     public JavaxMailOutbox(final Scalar<Properties> props) {
         this(new MimeMsg(), new StickyScalar<>(new SessionOf(props)));
     }

@@ -61,6 +61,14 @@ public final class JavaxMailInbox implements Inbox {
      * Ctor.
      * @param props The mail server connection properties.
      */
+    public JavaxMailInbox(final Properties props) {
+        this(() -> props);
+    }
+
+    /**
+     * Ctor.
+     * @param props The mail server connection properties.
+     */
     public JavaxMailInbox(final Scalar<Properties> props) {
         this(props, new Modes());
     }
