@@ -12,13 +12,13 @@ cache:
 
 script:
   - set -e
-  - mvn -Dpropof=10 -Pqulice clean install
+  - mvn -X -Pqulice clean install
+  - mvn -X -Pintegration-tests install -DLL.yandex.user=${EMAIL_USER} -DLL.yandex.pass=${EMAIL_PASS} -DLL.yandex.to.user=${EMAIL_TO}
   - mvn -Psonar sonar:sonar -Dsonar.organization=dgroup-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONAR_LOGIN}
 
 env:
   global:
-    - MAVEN_OPTS="-Xmx256m"
-    - JAVA_OPTS="-Xmx256m"
+    - MAVEN_OPTS="-Xmx256m -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS -Dorg.slf4j.simpleLogger.showDateTime=true"
 
 jdk:
   - openjdk8

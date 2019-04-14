@@ -6,7 +6,7 @@
 [![Build Status](https://travis-ci.org/dgroup/mbox4j.svg?branch=master&style=for-the-badge)](https://travis-ci.org/dgroup/mbox4j)
 [![0pdd](http://www.0pdd.com/svg?name=dgroup/mbox4j)](http://www.0pdd.com/p?name=dgroup/mbox4j)
 [![Dependency Status](https://requires.io/github/dgroup/mbox4j/requirements.svg?branch=master)](https://requires.io/github/dgroup/mbox4j/requirements/?branch=master)
-[![Known Vulnerabilities](https://snyk.io/test/github/dgroup/mbox4j/badge.svg)](https://snyk.io/org/dgroup/project/58b731a9-6b07-4ccf-9044-ad305ad243e6/?tab=dependencies&vulns=vulnerable)
+[![Known Vulnerabilities](https://snyk.io/test/github/dgroup/mbox4j/badge.svg)](https://snyk.io/org/dgroup/project/3bd606b4-323a-4a5e-a9cf-8fe847b7f94d/?tab=dependencies&vulns=vulnerable)
 
 [![DevOps By Rultor.com](http://www.rultor.com/b/dgroup/mbox4j)](http://www.rultor.com/p/dgroup/mbox4j)
 [![EO badge](http://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org/#principles)
@@ -14,9 +14,9 @@
 
 [![Qulice](https://img.shields.io/badge/qulice-passed-blue.svg)](http://www.qulice.com/)
 [![SQ maintainability](https://sonarcloud.io/api/project_badges/measure?project=io.github.dgroup%3Ambox4j&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=io.github.dgroup%3Ambox4j)
-[![Codebeat](https://codebeat.co/badges/f61cb4a4-660f-4149-bbc6-8b66fec90941)](https://codebeat.co/projects/github-com-dgroup-mbox4j-master)
+[![Codebeat](https://codebeat.co/badges/03a70479-61fe-4167-bf43-84dfd78d4cc0)](https://codebeat.co/projects/github-com-dgroup-mbox4j-master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e72eb423424b4b6db9ba64aa97463206)](https://www.codacy.com/app/dgroup/mbox4j?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dgroup/mbox4j&amp;utm_campaign=Badge_Grade)
-[![Codecov](https://codecov.io/gh/dgroup/mbox4j/branch/master/graph/badge.svg?token=Pqdeao3teI)](https://codecov.io/gh/dgroup/mbox4j)
+[![Codecov](https://codecov.io/gh/dgroup/mbox4j/branch/master/graph/badge.svg)](https://codecov.io/gh/dgroup/mbox4j)
 
 ## What it is
 **mbox4j** is an object-oriented primitives to simplify the manipulations with emails for Java-based applications.

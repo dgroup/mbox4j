@@ -28,10 +28,10 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.github.dgroup</groupId>
   <artifactId>mbox4j</artifactId>
-  <version>0.0.0</version>
+  <version>0.1.0</version>
   <packaging>jar</packaging>
   <name>${project.artifactId}</name>
-  <description>Simplify manipulations with CLI terminal(s) for Java-based applications</description>
+  <description>Simplify the manipulations with emails for Java-based applications.</description>
   <url>http://github.com/dgroup/mbox4j</url>
   <licenses>
     <license>
@@ -44,8 +44,8 @@
     <developer>
       <name>Yurii Dubinka</name>
       <email>yurii.dubinka@gmail.com</email>
-      <organization>com.github.dgroup</organization>
-      <organizationUrl>http://github.com/dgroup</organizationUrl>
+      <organization>io.github.dgroup</organization>
+      <organizationUrl>https://github.com/dgroup</organizationUrl>
     </developer>
   </developers>
   <scm>
