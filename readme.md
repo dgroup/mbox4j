@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](./license.txt)
 [![Commit activity](https://img.shields.io/github/commit-activity/y/dgroup/mbox4j.svg?style=flat-square)](https://github.com/dgroup/mbox4j/graphs/commit-activity)
 
-[![Build Status](https://travis-ci.org/dgroup/mbox4j.svg?branch=master&style=for-the-badge)](https://travis-ci.org/dgroup/mbox4j)
+[![Build Status](https://circleci.com/gh/dgroup/mbox4j.svg?style=svg)](https://circleci.com/gh/dgroup/mbox4j)
 [![0pdd](http://www.0pdd.com/svg?name=dgroup/mbox4j)](http://www.0pdd.com/p?name=dgroup/mbox4j)
 [![Dependency Status](https://requires.io/github/dgroup/mbox4j/requirements.svg?branch=master)](https://requires.io/github/dgroup/mbox4j/requirements/?branch=master)
 [![Known Vulnerabilities](https://snyk.io/test/github/dgroup/mbox4j/badge.svg)](https://snyk.io/org/dgroup/project/3bd606b4-323a-4a5e-a9cf-8fe847b7f94d/?tab=dependencies&vulns=vulnerable)
