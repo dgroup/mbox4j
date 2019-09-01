@@ -28,7 +28,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.github.dgroup</groupId>
   <artifactId>mbox4j</artifactId>
-  <version>0.1.0</version>
+  <version>0.0.0</version>
   <packaging>jar</packaging>
   <name>${project.artifactId}</name>
   <description>Simplify the manipulations with emails for Java-based applications.</description>
@@ -82,7 +82,7 @@
     <!-- General dependencies -->
     <cactoos.version>0.42</cactoos.version>
     <javax.mail.version>1.5.0-b01</javax.mail.version>
-    <term4j.version>0.3.0</term4j.version>
+    <term4j.version>0.4.0</term4j.version>
     <!-- Unit testing dependencies -->
     <hamcrest-all.version>1.3</hamcrest-all.version>
     <junit.version>4.12</junit.version>
