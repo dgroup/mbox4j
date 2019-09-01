@@ -33,7 +33,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import org.cactoos.BiFunc;
 import org.cactoos.Scalar;
-import org.cactoos.scalar.StickyScalar;
+import org.cactoos.scalar.Sticky;
 
 /**
  * The email postman based on {@link javax.mail} framework.
@@ -65,22 +65,20 @@ public class JavaxMailOutbox implements Outbox {
      * @param props The postman configuration properties.
      */
     public JavaxMailOutbox(final Scalar<Properties> props) {
-        this(new MimeMsg(), new StickyScalar<>(new SessionOf(props)));
+        this(new MimeMsg(), new Sticky<>(new SessionOf(props)));
     }
 
     /**
      * Ctor.
      * @param fmsg The function to prepare the {@link javax.mail.Message}.
-     * @param session The mail session with protocol providers.
+     * @param sssn The mail session with protocol providers.
      * @see javax.mail.Message
      * @see javax.mail.Session
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
-    public JavaxMailOutbox(
-        final BiFunc<Session, Msg, Message> fmsg, final Scalar<Session> session
-    ) {
+    public JavaxMailOutbox(final BiFunc<Session, Msg, Message> fmsg, final Scalar<Session> sssn) {
         this.fmsg = fmsg;
-        this.session = session;
+        this.session = sssn;
     }
 
     @Override

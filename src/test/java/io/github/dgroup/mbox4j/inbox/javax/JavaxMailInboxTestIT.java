@@ -49,19 +49,19 @@ import org.llorllale.cactoos.matchers.HasValues;
 public final class JavaxMailInboxTestIT {
 
     @Test
-    public void size() {
+    public void size() throws EmailException {
         new Assertion<>(
             "3 emails were read",
-            () -> this.read(1, 3),
+            this.read(1, 3),
             Matchers.iterableWithSize(3)
         ).affirm();
     }
 
     @Test
-    public void subject() {
+    public void subject() throws EmailException {
         new Assertion<>(
             "3 emails have expected subject",
-            () -> new Mapped<>(
+            new Mapped<>(
                 msg -> msg.subject().asString(),
                 this.read(1, 3)
             ),
@@ -74,10 +74,10 @@ public final class JavaxMailInboxTestIT {
     }
 
     @Test
-    public void attachments() {
+    public void attachments() throws EmailException {
         new Assertion<>(
             "2 file names from email has expected names",
-            () -> new Mapped<>(
+            new Mapped<>(
                 File::getName,
                 new Joined<>(
                     new Mapped<>(Msg::attachments, this.read(4, 4))
