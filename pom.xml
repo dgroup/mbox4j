@@ -28,7 +28,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.github.dgroup</groupId>
   <artifactId>mbox4j</artifactId>
-  <version>0.0.0</version>
+  <version>0.1.1</version>
   <packaging>jar</packaging>
   <name>${project.artifactId}</name>
   <description>Simplify the manipulations with emails for Java-based applications.</description>
