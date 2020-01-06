@@ -2,6 +2,7 @@
 [![Javadocs](http://www.javadoc.io/badge/io.github.dgroup/mbox4j.svg)](http://www.javadoc.io/doc/io.github.dgroup/mbox4j)
 [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](./license.txt)
 [![Commit activity](https://img.shields.io/github/commit-activity/y/dgroup/mbox4j.svg?style=flat-square)](https://github.com/dgroup/mbox4j/graphs/commit-activity)
+[![Hits-of-Code](https://hitsofcode.com/github/dgroup/mbox4j)](https://hitsofcode.com/view/github/dgroup/mbox4j)
 
 [![Build Status](https://circleci.com/gh/dgroup/mbox4j.svg?style=svg)](https://circleci.com/gh/dgroup/mbox4j)
 [![0pdd](http://www.0pdd.com/svg?name=dgroup/mbox4j)](http://www.0pdd.com/p?name=dgroup/mbox4j)
