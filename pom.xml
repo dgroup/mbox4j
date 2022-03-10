@@ -80,7 +80,7 @@
     <sonar.version>3.4.0.905</sonar.version>
     <commons-logging.version>1.2</commons-logging.version>
     <!-- General dependencies -->
-    <cactoos.version>0.42</cactoos.version>
+    <cactoos.version>0.50</cactoos.version>
     <javax.mail.version>1.5.0-b01</javax.mail.version>
     <term4j.version>0.4.0</term4j.version>
     <!-- Unit testing dependencies -->
